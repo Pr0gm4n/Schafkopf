@@ -36,7 +36,7 @@ class Card:
   def binding_order(self):
     return self.binding_suit + "-" + str(NUMBERS.index(self.number))
 
-  def __lt__(self, other):
+  def __lt__(self, other): # used for sorting
     if (self.binding_suit == "t") ^ (other.binding_suit == "t"): # exactly one trump
       return self.binding_suit == "t"
 
@@ -49,6 +49,12 @@ class Card:
 
     else: # no trump involved
       return self.binding_order() < other.binding_order()
+
+  def __gt__(self, other): # used to determine whether a card beats another
+    if (self.binding_suit == "t") or (other.binding_suit == "t") or (self.binding_suit == other.binding_suit): # trump involved or same (binding) suit
+      return self < other # use sorting comparison
+    else: # otherwise a card cannot beat another
+      return False
 
   def __eq__(self, other):
     return self.__repr__() == other.__repr__()
@@ -66,6 +72,8 @@ class Hand:
 
   # TODO: make sure that game mode "Sauspiel" is incorporated correctly
   def get_cards(self, suit):
+    if suit is None: # first player has (almost) free choice
+      return self.cards
     cards = []
     for card in self.cards:
       if card.binding_suit == suit:
@@ -76,6 +84,7 @@ class Hand:
 
   def play(self, card):
     self.cards.remove(card)
+    print("played card", card)
 
   def __repr__(self):
     repr = ""
@@ -96,6 +105,37 @@ class Player:
          + "---------------"     + "\n" \
          + self.hand.__repr__()  + "\n"
 
+  def play(self, turn = None):
+    if turn is None:
+      turn = Turn()
+    print("Player", self.name, "may put down", self.hand.get_cards(turn.get_suit()))
+
+    global rand
+    choice = rand.choice(self.hand.get_cards(turn.get_suit()))
+    self.hand.play(choice)
+    turn.add_card(choice)
+    return turn
+
+
+class Turn:
+  def __init__(self, suit = None):
+    self.suit = suit
+    self.cards = []
+    self.winner_card = None
+    self.winner = -1
+
+  def get_suit(self):
+    return self.suit
+
+  def add_card(self, card):
+    assert len(self.cards) < 4
+    if self.suit is None:
+      self.suit = card.binding_suit
+    if self.winner_card is None or card > self.winner_card:
+      self.winner_card = card
+      self.winner = len(self.cards)
+    self.cards.append(card)
+
 
 def main():
   global SUITS
@@ -109,7 +149,9 @@ def main():
     for number in NUMBERS:
       deck.append(Card(suit, number))
 
-  Random().shuffle(deck)
+  global rand
+  rand = Random()
+  rand.shuffle(deck)
 
   players = []
   for player in range(4):
@@ -122,6 +164,10 @@ def main():
   print(players)
 
   players = cycle(players)
+
+  turn = next(players).play()
+  for i in range(3):
+    next(players).play(turn)
 
 if __name__ == "__main__":
   # execute only if run as a script
