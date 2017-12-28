@@ -18,7 +18,7 @@ class Card:
   def __init__(self, suit, number):
     self.suit = suit
     self.number = number
-    self.binding_suit = suit
+    self.binding_suit = suit # used to determine which cards may be chosen in this round
 
     # initially order as if hearts were trump
     if number in ["U", "O"] or suit is "h":
@@ -64,12 +64,13 @@ class Hand:
   def __init__(self, cards):
     self.cards = cards
 
+  # TODO: make sure that game mode "Sauspiel" is incorporated correctly
   def get_cards(self, suit):
     cards = []
     for card in self.cards:
-      if card.suit == suit:
+      if card.binding_suit == suit:
         cards.append(card)
-    if len(cards) == 0:
+    if len(cards) == 0: # if no card of the given suit is available, we are not bound by any rules
       return self.cards
     return cards
 
