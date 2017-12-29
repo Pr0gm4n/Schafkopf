@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 -i
 
 
 from random import SystemRandom as Random
@@ -105,20 +105,23 @@ class Player:
          + "---------------"     + "\n" \
          + self.hand.__repr__()  + "\n"
 
-  def play(self, turn = None):
-    if turn is None:
-      turn = Turn()
+  def start_round(self, history):
+    turn = Turn(self.name)
+    self.play(turn, history)
+    return turn
+
+  def play(self, turn, history):
     print("Player", self.name, "may put down", self.hand.get_cards(turn.get_suit()))
 
     global rand
     choice = rand.choice(self.hand.get_cards(turn.get_suit()))
     self.hand.play(choice)
     turn.add_card(choice)
-    return turn
 
 
 class Turn:
-  def __init__(self, suit = None):
+  def __init__(self, initiator, suit = None):
+    self.initiator = initiator
     self.suit = suit
     self.cards = []
     self.winner_card = None
@@ -140,9 +143,9 @@ class Turn:
 def main():
   global SUITS
   global NUMBERS
-  # for interactive shell
-  global deck
-  global players
+
+  global deck # for access from the interactive shell
+  global players # for access from the interactive shell
 
   deck = []
   for suit in SUITS.keys():
@@ -165,9 +168,17 @@ def main():
 
   players = cycle(players)
 
-  turn = next(players).play()
-  for i in range(3):
-    next(players).play(turn)
+  winner = 0
+  history = []
+  for i in range(8):
+    turn = next(players).start_round(history)  # play initial card
+    for j in range(3):                         # each player puts down a card
+      next(players).play(turn, history)
+    for k in range(turn.winner):               # scroll to winner of the round
+      next(players)
+    history.append(turn)
+
+    input()                                    # wait for a keypress
 
 if __name__ == "__main__":
   # execute only if run as a script
