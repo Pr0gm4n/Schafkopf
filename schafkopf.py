@@ -19,21 +19,46 @@ class Schafkopf:
         self.init_deck()
         self.deal_to_players()
 
+        from game import Game # TODO: for testing only! remove!
+        self.players[2].game = Game("Solo")
+
         print(self.players)
+
+        game = None
+        announcer = -1
+        for i, player in enumerate(self.players):
+            # TODO: possibly might not play a game if another player already
+            # announces a game
+            if player.game > game:
+                game = player.game
+                announcer = i
 
         self.players = cycle(self.players)
 
+        # scroll to the announcer
+        for _ in range(announcer):
+            next(self.players)
+        # update card ordering according to selected game
+        for card in self.deck:
+            pass # TODO: set new order and sort players' hands
+
         winner = 0
         history = []
-        for _ in range(8):                                  # iterate over all 8 cards
-            turn = next(self.players).start_round(history)  # play initial card
-            for _ in range(3):                              # each player puts down a card
+        # iterate 8 turns / rounds
+        for _ in range(8):
+            # turn initiation
+            turn = next(self.players).start_round(history)
+            # each player puts down a card
+            for _ in range(3):
                 next(self.players).play(turn, history)
-            for _ in range(turn.winner):                    # scroll to winner of the round
+            # scroll to winner of the round
+            for _ in range(turn.winner):
                 next(self.players)
+            # memorize outcome
             history.append(turn)
 
-            input()                                         # wait for a keypress
+            # wait for a keypress
+            input()
 
 
         embed() # start debugging in this context

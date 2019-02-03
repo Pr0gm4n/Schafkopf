@@ -3,7 +3,7 @@ class Hand:
         self.cards = cards
 
     # TODO: make sure that game mode "Sauspiel" is incorporated correctly
-    def get_cards(self, suit):
+    def get_playable_cards(self, suit):
         if suit is None: # first player has (almost) free choice
             return self.cards
         cards = []
