@@ -1,5 +1,5 @@
 class Game:
-    MODES = ["Sauspiel", "Wenz", "Solo"]
+    MODES = ["weiter", "Sauspiel", "Wenz", "Solo"]
 
     def __init__(self, mode, suit=None):
         self.mode = mode
