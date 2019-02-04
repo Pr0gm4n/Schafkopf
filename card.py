@@ -15,7 +15,7 @@ class Card:
         self.binding_suit = suit # used to determine which cards may be chosen in this round
 
         # initially order as if hearts were trump
-        if number in ["O", "U"] or suit is "h":
+        if number in ["O", "U"] or suit == "h":
             self.binding_suit = "t"
 
     def __repr__(self):
@@ -24,11 +24,19 @@ class Card:
     def __str__(self):
         return self.suit + "-" + self.number
 
+    # using lexical ordering
     def order(self):
         return self.suit + "-" + str(Card.NUMBERS.index(self.number))
 
+    # using lexical ordering
     def binding_order(self):
         return self.binding_suit + "-" + str(Card.NUMBERS.index(self.number))
+
+    def adapt_to(self, game):
+        if game.is_trump(self):
+            self.binding_suit = "t"
+        else:
+            self.binding_suit = self.suit
 
     def __lt__(self, other): # used for sorting
         if (self.binding_suit == "t") ^ (other.binding_suit == "t"): # exactly one trump

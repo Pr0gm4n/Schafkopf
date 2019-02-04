@@ -18,5 +18,10 @@ class Hand:
         self.cards.remove(card)
         print("played card", card)
 
+    def sort(self, game):
+        for card in self.cards:
+            card.adapt_to(game)
+        self.cards.sort()
+
     def __repr__(self):
         return " ".join([str(x) for x in self.cards])

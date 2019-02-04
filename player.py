@@ -4,8 +4,9 @@ from turn import Turn
 from game import Game
 
 class Player:
-    def __init__(self, name, hand):
+    def __init__(self, name, player_id, hand):
         self.name = name
+        self.player_id = player_id
         self.hand = hand
         self.stack = []
         self.game = Game("Sauspiel") #TODO: properly select game you want to play
@@ -24,3 +25,8 @@ class Player:
         choice = Random().choice(self.hand.get_playable_cards(turn.get_suit()))
         self.hand.play(choice)
         turn.add_card(choice)
+
+    def set_game(self, game, announcer):
+        self.hand.sort(game)
+        self.announcer = announcer
+        self.game = game

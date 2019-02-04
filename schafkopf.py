@@ -33,14 +33,11 @@ class Schafkopf:
                 game = player.game
                 announcer = i
 
-        self.players = cycle(self.players)
-
-        # scroll to the announcer
-        for _ in range(announcer):
-            next(self.players)
         # update card ordering according to selected game
-        for card in self.deck:
-            pass # TODO: set new order and sort players' hands
+        for player in self.players:
+            player.set_game(game, announcer)
+
+        self.players = cycle(self.players)
 
         winner = 0
         history = []
@@ -72,12 +69,12 @@ class Schafkopf:
 
     def deal_to_players(self):
         self.players = []
-        for player in range(4):
+        for player_id in range(4):
             cards = []
             for card in range(8):
-                cards.append(self.deck[8 * player + card])
+                cards.append(self.deck[8 * player_id + card])
             cards.sort()
-            self.players.append(Player(str(player), Hand(cards)))
+            self.players.append(Player(str(player_id), player_id, Hand(cards)))
 
 
 if __name__ == "__main__":
