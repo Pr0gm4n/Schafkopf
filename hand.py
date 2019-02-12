@@ -23,5 +23,13 @@ class Hand:
             card.adapt_to(game)
         self.cards.sort()
 
+    """ Evaluate this hand based on an estimation function that assigns a
+        probability value to each held card. Returns the sum of the estimated
+        values.
+    """
+    def evaluate(self, estimator):
+        print("Estimate:", [estimator(card) for card in self.cards])
+        return sum([estimator(card) for card in self.cards])
+
     def __repr__(self):
         return " ".join([str(x) for x in self.cards])
