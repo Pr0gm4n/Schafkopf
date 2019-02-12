@@ -5,7 +5,7 @@ from itertools import cycle
 
 from card import Card
 from hand import Hand
-from player import Player
+from player import AIPlayer, HumanPlayer
 
 from IPython import embed
 
@@ -74,7 +74,7 @@ class Schafkopf:
             for card in range(8):
                 cards.append(self.deck[8 * player_id + card])
             cards.sort()
-            self.players.append(Player(str(player_id), player_id, Hand(cards)))
+            self.players.append(AIPlayer(str(player_id), player_id, Hand(cards)))
 
 
 if __name__ == "__main__":

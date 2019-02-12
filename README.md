@@ -6,6 +6,7 @@ A little python script that supposedly implements the rules of a Bavarian card g
 
 ```diff
 + WIP: add round of players announcing games
+- make sure selected game mode is allowed (Sauspiel requirements)
 - implement game modes
 - add initiation rules for a "Sauspiel" with regard to the "Rufsau"
 - assign different trump color / only *U*'s (e.g. "Wenz")
