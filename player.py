@@ -9,10 +9,13 @@ class Player:
         self.player_id = player_id
         self.hand = hand
         self.stack = []
-        self.game = Game("Sauspiel") #TODO: properly select game you want to play
+        self.init_game()
 
     def __repr__(self):
         return "Player " + self.name + ": " + self.hand.__repr__()
+
+    def init_game(self):
+        self.game = Game("weiter") #TODO: properly select game you want to play
 
     def start_round(self, history):
         turn = Turn(self.name)

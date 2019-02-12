@@ -1,11 +1,17 @@
+from card import Card
+
 class Game:
     MODES = ["weiter", "Sauspiel", "Wenz", "Solo"]
 
     def __init__(self, mode, suit=None):
+        assert mode in Game.MODES
         self.mode = mode
+        assert suit in Card.SUITS
         self.suit = suit
+
         if mode == "Sauspiel":
             self.suit = "h"
+            # for correctly ordering the cards, see Game.is_trump() for details
 
     def is_trump(self, card):
         if self.mode == "weiter":
