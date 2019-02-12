@@ -86,7 +86,21 @@ class AIPlayer(Player):
         return max_probability, max_probability_suit
 
     def wenz_probability(self):
-        return 0.0
+        def wenz_card_estimator(card):
+            return {
+                "U": 0.18,
+                "A": 0.07,
+                "X": 0.03,
+                "K": 0.01,
+                "O": 0.00,
+                "9": 0.00,
+                "8": 0.00,
+                "7": 0.00
+            }[card.number]
+
+        probability = self.hand.evaluate(wenz_card_estimator)
+        print("Estimating Wenz: " + str(probability))
+        return probability
 
     def sauspiel_probability(self):
         max_probability = -1.0
