@@ -15,7 +15,27 @@ class Player:
         return "Player " + self.name + ": " + self.hand.__repr__()
 
     def init_game(self):
-        self.game = Game("weiter") #TODO: properly select game you want to play
+        solo, solo_suit = self.solo_probability()
+        wenz = self.wenz_probability()
+        sauspiel, sauspiel_suit = self.sauspiel_probability()
+
+        if solo > wenz and solo > 0.6:
+            self.game = Game("Solo", solo_suit)
+        elif wenz > 0.6:
+            self.game = Game("Wenz")
+        elif sauspiel > 0.6:
+            self.game = Game("Sauspiel", sauspiel_suit)
+        else:
+            self.game = Game("weiter")
+
+    def solo_probability(self):
+        return 0.0, None
+
+    def wenz_probability(self):
+        return 0.0
+
+    def sauspiel_probability(self):
+        return 0.0, None
 
     def start_round(self, history):
         turn = Turn(self.name)

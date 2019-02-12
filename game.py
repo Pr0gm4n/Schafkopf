@@ -7,11 +7,12 @@ class Game:
         assert mode in Game.MODES
         self.mode = mode
         assert suit in Card.SUITS
-        self.suit = suit
-
         if mode == "Sauspiel":
-            self.suit = "h"
             # for correctly ordering the cards, see Game.is_trump() for details
+            self.suit = "h"
+            self.called_suit = suit
+        else:
+            self.suit = suit
 
     def is_trump(self, card):
         if self.mode == "weiter":
