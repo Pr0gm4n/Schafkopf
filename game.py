@@ -5,9 +5,10 @@ class Game:
 
     def __init__(self, mode, suit=None):
         assert mode in Game.MODES
+        assert not suit or suit in Card.SUITS
+
         self.mode = mode
-        assert suit in Card.SUITS
-        if mode == "Sauspiel":
+        if self.mode == "Sauspiel":
             # for correctly ordering the cards, see Game.is_trump() for details
             self.suit = "h"
             self.called_suit = suit
@@ -31,3 +32,11 @@ class Game:
         if not other:
             return False
         return self.mode == other.mode
+
+    def __repr__(self):
+        if self.mode == "Sauspiel":
+            return self.mode + " mit der " + Card.SUITS[self.called_suit] + " Sau"
+        elif self.suit:
+            return Card.SUITS[self.suit] + " " + self.mode
+        else:
+            return self.mode
